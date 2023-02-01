@@ -53,6 +53,13 @@ Un mutex se folosește pentru a proteja o secțiune critică de cod, astfel înc
 
 Această tehnică de sincronizare se folosește pentru a preveni accesul concurrent la resursele partajate, astfel încât să se evite conflictele sau datele corupte.
 
+### Pipe-ul
+este un mecanism de comunicare între procese care permite transmisia datelor într-un singur sens, de la un proces la un altul.
+
+Pipe-urile sunt utilizate pentru a permite proceselor să se comunice prin intermediul sistemului de fișiere, fără a folosi fișiere sau socket-uri. Datele sunt scrise într-un capăt al pipe-ului de un proces și citite din celălalt capăt de un alt proces.
+
+Pipe-urile sunt folosite frecvent pentru a transmite date între procese care rulează în paralel sau pentru a implementa mecanisme de redirectionare a intrării și a ieșirii în shell-uri sau alte programe de linie de comandă.
+
 ### PTBR (Page Table Base Register)
 este un registru special în procesor care stochează adresa bazei tabelului de pagini utilizată în sistemele de operare care folosesc memorie virtuală.
 
