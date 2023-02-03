@@ -18,6 +18,9 @@ Dar, dacă unul dintre procese încearcă să modifice conținutul zonei de memo
 
 COW este utilizat pentru a optimiza alocarea memoriei și a îmbunătăți performanța sistemului, deoarece permite sistemului de operare să împartă eficient zona de memorie între mai multe procese, fără a fi necesară alocarea unor copii suplimentare a acestei zone. În același timp, dacă un proces are nevoie să modifice această zonă de memorie, acesta primește propria sa copie, fără a afecta celelalte procese.
 
+### Eterogen
+Thread-urile procesului fac chestii diferite
+
 ### FDT sau Flattened Device Tree (Arbore de dispozitive aplanat)
 este o reprezentare a configurației hardware a unui sistem, utilizat în sistemele bazate pe kernel-ul Linux. FDT descrie dispozitivele și componentele hardware dintr-un sistem într-un format de fișier care poate fi interpretat de sistemul de operare.
 
@@ -46,12 +49,11 @@ Configurarea parametrilor de intrare și a mediului de execuție (cum ar fi seta
 Începerea execuției programului, asigurând că totul este pregătit și configurat corect
 Un loader joacă un rol crucial în execuția unui program și poate avea un impact semnificativ asupra performanței și securității sistemului.
 
-### Mutex-ul (Mutual Exclusion Object) 
-este un mecanism de sincronizare utilizat în programare pentru a permite accesul exclusiv la o resursă partajată între mai multe procese sau thread-uri.
+### Mutex-urile
+sunt o formă de sincronizare care funcționează prin context switch, și ocazional apel de sistem (chemarea scheduler-ului la lock() și unlock). Sunt folosite în toate celelalte cazuri în care spinlock-ul nu este viabil: apeluri blocante, zone critice mari
 
-Un mutex se folosește pentru a proteja o secțiune critică de cod, astfel încât aceasta să fie executată de un singur proces sau thread la un moment dat. Când un proces sau thread încearcă să acceseze o resursă protejată de un mutex, acesta poate fi blocat dacă alt proces sau thread ocupă resursa în acest moment. Procesul sau thread-ul blocat va aștepta până când resursa devine disponibilă.
-
-Această tehnică de sincronizare se folosește pentru a preveni accesul concurrent la resursele partajate, astfel încât să se evite conflictele sau datele corupte.
+### Omogen
+Thread-urile aplicatiei fac aceelasi lucru
 
 ### Pipe-ul
 este un mecanism de comunicare între procese care permite transmisia datelor într-un singur sens, de la un proces la un altul.
@@ -65,14 +67,11 @@ este un registru special în procesor care stochează adresa bazei tabelului de 
 
 În sistemele de operare cu memorie virtuală, fiecare proces are propria sa tabelă de pagini, care conține informații despre maparea dintre adresele virtuale utilizate de proces și adresele fizice din memorie. PTBR conține adresa bazei acestei tabele, care este utilizată de procesor pentru a accesa informațiile din tabelă când un proces accesează o adresă virtuală.
 
-PTBR este un registru important în sistemele de operare cu memorie virtuală, deoarece permite procesorului să acceseze rapid informațiile necesare pentru a traduce adresele virtuale în adrese fizice, ceea ce este esențial pentru performanța sistemului.
+### Seek
+este o operație de sistem de fișiere care permite poziționarea unui indicator de citire/scriere într-un fișier. Când se apelă o operație seek, indicatorul de citire/scriere este mutat la o nouă poziție în fișier, astfel încât următoarea operație de citire sau scriere să se facă de la acea poziție. Seek-ul poate fi utilizat pentru a naviga într-un fișier mare sau pentru a citi sau scrie fragmente specifice din fișier.
 
-### Spinlock-ul
-este un mecanism de sincronizare utilizat în programare pentru a permite accesul exclusiv la o resursă partajată între mai multe procese sau thread-uri.
-
-În timp ce un mutex poate bloca procesul sau thread-ul care încearcă să acceseze o resursă protejată, un spinlock nu blochează procesul sau thread-ul, ci îl face să ruleze în buclă până când resursa devine disponibilă. Acest comportament se numește "spinning".
-
-Spinlock-urile sunt folosite în situațiile în care blocarea poate fi costisitoare din punct de vedere al performanței, cum ar fi în contextul unui sistem cu multipli nuclei sau în cazul accesului la resurse critice. Totuși, spunlock-urile pot fi costisitoare în ceea ce privește consumul de resurse al sistemului și trebuie utilizate cu precauție.
+### Spinlock-urile
+sunt o formă de busy waiting în starea de RUNNING. Ele nu determină ieșirea de pe procesor a thread-ului care așteaptă. Sunt folosite atunci când timpul de așteptare nu este mare (zone critice mici, fără apeluri blocante), iar un context switch este mai costisitor în comparație.
 
 ### Swap memory sau swap space
 este o zonă de memorie secundară utilizată de sistemul de operare pentru a gestiona resursele de memorie fizică. Când sistemul de operare are nevoie de mai multă memorie decât cea disponibilă în RAM, el poate muta pagini din RAM în swap memory pentru a elibera spațiu în RAM pentru alte procese care au nevoie de memorie.
@@ -96,3 +95,7 @@ este un cache hardware utilizat în sistemele de operare pentru a îmbunătăți
 Când un proces accesează o adresă virtuală, sistemul de operare verifică întâi TLB-ul pentru a vedea dacă există o traducere valabilă pentru acea adresă virtuală. Dacă există, sistemul de operare accesează direct adresa fizică corespunzătoare, evitând astfel procesul de traducere costisitor.
 
 TLB-ul ajută la îmbunătățirea performanței sistemului prin reducerea numărului de traduceri necesare pentru accesarea memoriei virtuale și prin accelerarea accesului la această memorie.
+
+### TOCTOU (time of check to time of use)
+
+Se referă la un race condition care apare imediat după un compare, înainte de a se face instrucțiunea următoare (de folosire), când un alt thread apare și modifică valoarea considerată "safe".
